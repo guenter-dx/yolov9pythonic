@@ -1,0 +1,21 @@
+# data folders
+data/train
+data/test
+data/valid
+# quality check folder
+data/QC*
+
+
+media/
+
+*pycache*
+runs/
+*env
+
+
+# file types
+*.pt*
+
+
+# irrelevant WIP files
+plot_video_boxes.py

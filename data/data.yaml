@@ -1,0 +1,14 @@
+train: data/train/images
+val: data/valid/images
+test: data/test/images
+        
+nc: 1
+names: ['My Class Name']
+
+
+Author: Guenter Roehrich
+project: Medium.com support code (https://towardsdatascience.com/object-detection-55499ef46a12)
+version: 0.1
+license: GNU GENERAL PUBLIC LICENSE
+url: https://www.roehrich.dev
+    

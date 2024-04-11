@@ -233,6 +233,43 @@ class LoadScreenshots:
         self.frame += 1
         return str(self.screen), im, im0, None, s  # screen, img, original img, im0s, s
 
+class LoadTensor:
+    def __init__(self, path, img_size=640, stride=32, auto=True, transforms=None):
+        self.img_size = img_size
+        self.stride = stride
+        self.transforms = transforms
+        self.auto = auto
+        self.mode = 'image'
+        self.path = path
+        self.cap = None
+        self.nf = 1 # num of files
+        
+    def __iter__(self):       
+        self.count = 0
+        return self
+    
+    def __next__(self):
+        if self.count == self.nf:
+            raise StopIteration
+                
+        self.count +=1
+        im0 = self.path # not passing a string but file already
+        assert im0 is not None, f'Passed Array is empty'
+        
+        if self.transforms:
+            im = self.transforms(im0)
+        else:
+            im = letterbox(im0, self.img_size, stride=self.stride, auto=self.auto)[0]  # padded resize
+            im = im.transpose((2, 0, 1))[::-1]  # HWC to CHW, BGR to RGB
+            im = np.ascontiguousarray(im)  # contiguous
+        
+        path = 'Detection_tensor'
+        s = 'Infrence on Tensor - dataloader passed.'
+        return path, im, im0, self.cap, s
+    
+    def __len__(self):
+        return self.nf
+        
 
 class LoadImages:
     # YOLOv5 image/video dataloader, i.e. `python detect.py --source image.jpg/vid.mp4`

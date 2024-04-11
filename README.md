@@ -1,5 +1,54 @@
 # YOLOv9
 
+## A more "Pythonic" wrapper around Yolov9
+
+This fork has been introduced to follow a more pythonic way of working with the program. I aimed at creating a structure similar to the Ultralytics (c) version of Yolov8.
+
+### Usage
+
+Train the model similar to V8:
+
+#### Training
+
+    model = Yolo(
+        name = "YoloPythonic",
+        batch_size=16,
+        epochs=100
+    )
+
+     model.train()
+
+
+
+#### Inference
+
+Model inference works as in the original implementation, however, some edits have been made to the <code>utils.dataloaders</code> to allow processing <code>np.ndarray()</code> and <code>torch.Tensor()</code> directly.
+
+    model = Yolo()
+    vid = cv2.VideoCapture('data/tokyo.mp4')
+    # Read one frame only
+    ret, frame = vid.read()
+
+    boxes = model.predict(frame, classes=0) # -> new tensor dataloader
+    print(boxes)
+    
+    >>> print(boxes)
+        tensor([[6.82000e+02, 3.84000e+02, 8.04000e+02, 6.42000e+02, 7.44543e-01,  0.00000e+00],
+        [9.19000e+02, 4.37000e+02, 1.04000e+03, 7.09000e+02, 6.67637e-01, 0.00000e+00]])
+
+To visualize this, a tiny helper has been added to allow 
+
+    from utils.plot_simple_boxs import render
+    img = render(frame, boxes)
+    plt.imsave('data/tokyo.jpg', img)
+
+As already impemented by the original author, infrence works on all supported formats (e.g. jpg, mp4, video stream):
+
+    boxes = model.predict('data/vienna.jpg', classes=(0,9)) # existing image loader
+    print(boxes)
+
+
+
 Implementation of paper - [YOLOv9: Learning What You Want to Learn Using Programmable Gradient Information](https://arxiv.org/abs/2402.13616)
 
 [![arxiv.org](http://img.shields.io/badge/cs.CV-arXiv%3A2402.13616-B31B1B.svg)](https://arxiv.org/abs/2402.13616)
